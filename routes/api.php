@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\KamarController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +24,6 @@ Route::get('/user', [App\Http\Controllers\Api\UserController::class, 'index']);
 Route::get('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'show']);
 Route::put('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'update']);
 Route::delete('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'destroy']);
+Route::post('/updatePass', [App\Http\Controllers\Api\UserController::class, 'updatePassword']);
+
+Route::apiResource('kamar', KamarController::class);

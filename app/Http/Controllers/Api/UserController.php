@@ -148,4 +148,42 @@ class UserController extends Controller
             'data'=> null
             ] ,400);
     }
+
+    public function updatePassword(Request $request)
+    {
+        try {
+            $user = User::where('email', $request->input('email'))->first();
+
+            if (!$user) {
+                return response(['message' => 'User Tidak Ditemukan !'], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email:rfc,dns',
+                'new_password' => 'required|min:5',
+            ]);
+
+            if ($validator->fails()) {
+                return response(['message' => $validator->errors()], 400);
+            }
+
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
+
+            return response()->json([
+                "status" => true,
+                "message" => 'Berhasil Update Password',
+                "data" => [
+                    'user_id' => $user->id,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage(),
+                "data" => []
+            ], 400);
+        }
+    }
+
 }
